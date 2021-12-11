@@ -13,7 +13,7 @@ body {
   font-family: "Rubik", sans-serif;
 }
 
-body > main {
+body>main {
   flex: 1 1 auto;
 }
 
@@ -31,11 +31,11 @@ a:hover {
   opacity: 0.8;
 }
 
-a > i {
+a>i {
   transition: all 0.25s;
 }
 
-a:hover > i {
+a:hover>i {
   transform: rotate(90deg);
 }
 
@@ -72,4 +72,16 @@ ul {
 .nav .nav__logo {
   height: 40px;
   width: auto;
+}
+
+.nav .nav__link {
+  text-decoration: none;
+}
+
+.nav .nav__link:hover {
+  text-decoration: underline;
+}
+
+.nav .nav__link>i {
+  margin-right: 5px;
 }
