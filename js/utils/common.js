@@ -14,8 +14,17 @@ export function setThumbnail(parentElement, selector, url) {
   if (!element) return
 
   element.addEventListener('error', () => {
-    element.src = 'https://picsum.photos/200/300'
+    console.warn('loaded image error !!!')
+    element.src = 'https://via.placeholder.com/1368x400?text=thumbnail'
   })
 
   element.src = url
+}
+
+export function truncate(text, maxLength = 100) {
+  if (text.length < maxLength) {
+    return text
+  }
+
+  return `${text.slice(0, maxLength - 1)}...`
 }

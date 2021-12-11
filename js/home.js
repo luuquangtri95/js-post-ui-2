@@ -1,5 +1,9 @@
 import postApi from './apis/postApi'
-import { setTextContent, setThumbnail } from './utils'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import { setTextContent, setThumbnail, truncate } from './utils'
+
+dayjs.extend(relativeTime)
 
 function createPostElement(post) {
   if (!post) return
@@ -14,8 +18,13 @@ function createPostElement(post) {
 
   // update info
   setTextContent(liElement, '[data-id="title"]', post.title)
-  setTextContent(liElement, '[data-id="description"]', post.title)
-  setTextContent(liElement, '[data-id="authors"]', post.title)
+  setTextContent(liElement, '[data-id="description"]', truncate(post.description))
+  setTextContent(liElement, '[data-id="author"]', post.author)
+
+  // calc timeSpan
+  // console.log(dayjs(post.updatedAt).fromNow())
+  setTextContent(liElement, '[data-id="timeSpan"]', `- ${dayjs(post.updatedAt).fromNow()}`)
+
   setThumbnail(liElement, '[data-id="thumbnail"]', post.imageUrl)
 
   return liElement
