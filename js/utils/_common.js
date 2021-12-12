@@ -14,7 +14,7 @@ export function setThumbnail(parentElement, selector, url) {
   if (!element) return
 
   element.addEventListener('error', () => {
-    console.warn('loaded image error !!!')
+    console.warn('loaded image error -> use default placeholder !!!')
     element.src = 'https://via.placeholder.com/1368x400?text=thumbnail'
   })
 
