@@ -25,22 +25,22 @@ export function initPagination({ elementId, defaultParams, onChange }) {
   // add click event
   const prevLink = ulPagination.firstElementChild?.firstElementChild
   if (prevLink) {
-    prevLink.addEventListener('click', (event) => {
+    prevLink.addEventListener('click', async (event) => {
       event.preventDefault()
 
       const page = Number.parseInt(ulPagination.dataset.page) || 1
-      if (page >= 2) onChange?.(page - 1)
+      if (page >= 2) await onChange?.(page - 1)
     })
   }
 
   const nextLink = ulPagination.lastElementChild?.lastElementChild
   if (nextLink) {
-    nextLink.addEventListener('click', (event) => {
+    nextLink.addEventListener('click', async (event) => {
       event.preventDefault()
 
       const page = Number.parseInt(ulPagination.dataset.page) || 1
       const totalPages = Number.parseInt(ulPagination.dataset.totalPages)
-      if (page < totalPages) onChange?.(page + 1)
+      if (page < totalPages) await onChange?.(page + 1)
     })
   }
 }

@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { setTextContent, setThumbnail, truncate } from '../_common'
+import { setTextContent, setThumbnail, truncate } from '../common'
 
 dayjs.extend(relativeTime)
 

@@ -10,7 +10,7 @@ export function initSearchInput({ elementId, defaultParams, onChange }) {
 
   // set default value form query params
   // title_like
-  const debounceSearch = debounce((event) => onChange?.(event.target.value), 500)
+  const debounceSearch = debounce(async (event) => await onChange?.(event.target.value), 500)
 
   searchInput.addEventListener('input', debounceSearch)
 }
