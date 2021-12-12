@@ -68,6 +68,10 @@
       </li>
     </template>
 
+    <template id="paginationItem">
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+    </template>
+
     <header>
       <!-- Navigation
       - Please note that we use an empty item to make sure that we always have 3 flex-items
@@ -169,17 +173,15 @@
 
           <!-- Posts pagination -->
           <nav class="posts-nav" aria-label="Posts navigation">
-            <ul id="pagination" class="pagination justify-content-center">
+            <ul id="pagination" data-name="previous" class="pagination justify-content-center">
               <li class="page-item">
                 <a class="page-link" href="#" aria-label="Previous">
                   <span aria-hidden="true">&laquo; Prev</span>
                 </a>
               </li>
-              <!-- <li class="page-item"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li> -->
+
               <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
+                <a class="page-link" data-name="next" href="#" aria-label="Next">
                   <span aria-hidden="true">Next &raquo;</span>
                 </a>
               </li>
