@@ -21,9 +21,16 @@ function createPostElement(post) {
   setTextContent(liElement, '[data-id="author"]', post.author)
 
   // calc timeSpan
-  // console.log(dayjs(post.updatedAt).fromNow())
   setTextContent(liElement, '[data-id="timeSpan"]', `- ${dayjs(post.updatedAt).fromNow()}`)
   setThumbnail(liElement, '[data-id="thumbnail"]', post.imageUrl)
+
+  // attach event
+  const divElement = liElement.firstElementChild
+  if (!divElement) return
+
+  divElement.addEventListener('click', () => {
+    window.location.assign(`/post-detail.html?id=${post.id}`)
+  })
 
   return liElement
 }
