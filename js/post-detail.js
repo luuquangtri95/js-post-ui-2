@@ -1,7 +1,19 @@
 import postApi from './apis/postApi'
-import { renderPostDetail } from './utils'
+import { registerLightBox, renderPostDetail } from './utils'
 ;(async () => {
   try {
+    registerLightBox({
+      modalId: 'lightbox',
+      imageSelector: 'img[data-id="lightboxImg"]',
+      prevSelector: 'button[data-id="lightboxPrev"]',
+      nextSelector: 'button[data-id="lightboxNext"]',
+    })
+    registerLightBox({
+      modalId: 'lightbox',
+      imageSelector: 'img[data-id="lightboxImg"]',
+      prevSelector: 'button[data-id="lightboxPrev"]',
+      nextSelector: 'button[data-id="lightboxNext"]',
+    })
     /**
      * get post id from URL
      * fetch post detail API
