@@ -32,6 +32,6 @@ export function renderPostDetail(post) {
   const editPageLinkElement = document.getElementById('goToEditPageLink')
   if (editPageLinkElement) {
     editPageLinkElement.href = `/add-edit-post.html?id=${post.id}`
-    editPageLinkElement.innerHTML = '<i class="fas fa-edit"></i> Edit Posts'
+    editPageLinkElement.innerHTML = 'Edit Posts <i class="fas fa-edit"></i> '
   }
 }
