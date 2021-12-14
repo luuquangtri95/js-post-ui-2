@@ -28,8 +28,23 @@ function createPostElement(post) {
   const divElement = liElement.firstElementChild
   if (!divElement) return
 
-  divElement.addEventListener('click', () => {
+  divElement.addEventListener('click', (event) => {
+    const menu = liElement.querySelector('[data-id="menu"]')
+    if (menu && menu.contains(event.target)) return
+
+    /**
+     * TODO: nếu mà click vào menu chứa edit button và remove button thì sẽ bỏ qua không làm gì cả
+     */
+
+    // console.log('parent')
     window.location.assign(`/post-detail.html?id=${post.id}`)
+  })
+
+  const editIconElement = liElement.querySelector('[data-id="edit"]')
+  if (!editIconElement) return
+
+  editIconElement.addEventListener('click', () => {
+    window.location.assign(`/add-edit-post.html?id=${post.id}`)
   })
 
   return liElement
