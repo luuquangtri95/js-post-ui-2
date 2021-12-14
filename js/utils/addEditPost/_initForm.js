@@ -1,16 +1,19 @@
+import { setBackgroundImage, setFieldValue } from '..'
+
+function setFormValue(form, formValue) {
+  setFieldValue(form, '[name="title"]', formValue?.title)
+  setFieldValue(form, '[name="author"]', formValue?.author)
+  setFieldValue(form, '[name="description"]', formValue?.description)
+
+  setFieldValue(document, '[name="imageUrl"]', formValue?.imageUrl) //hidden field -> dùng để lấy image url dễ dàng hơn
+  setBackgroundImage(document, '#postHeroImage', formValue?.imageUrl)
+}
+
 export function initForm({ elementId, defaultValue, onSubmit }) {
   const formElement = document.getElementById(elementId)
   if (!formElement) return
 
-  const formTitle = formElement.querySelector('[name="title"]')
-  const formAuthor = formElement.querySelector('[name="author"]')
-  const formDesc = formElement.querySelector('[name="description"]')
-
-  if (!formAuthor || !formDesc || !formTitle) return
-
-  formTitle.value = defaultValue.title
-  formAuthor.value = defaultValue.author
-  formDesc.value = defaultValue.description
+  setFormValue(formElement, defaultValue)
 
   formElement.addEventListener('submit', (e) => {
     e.preventDefault()
