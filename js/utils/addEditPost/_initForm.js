@@ -1,4 +1,5 @@
 import { setBackgroundImage, setFieldValue, setTextContent } from '..'
+import * as yup from 'yup'
 
 function setFormValue(form, formValue) {
   setFieldValue(form, '[name="title"]', formValue?.title)
@@ -41,18 +42,51 @@ function getTitleError(form) {
   return ''
 }
 
-function validatePostForm(form, formValues) {
-  // get error
-  const errors = {
-    title: getTitleError(form),
-  }
+function getPostSchema() {
+  return yup.object().shape({
+    title: yup.string().required('please enter title'),
+    author: yup
+      .string()
+      .required('please enter author')
+      .test('at-least-two-words', 'please enter at least two words ', (value) => {
+        return value.split(' ').filter((x) => !!x && x.length >= 3).length >= 2
+      }),
+    description: yup.string(),
+  })
+}
 
-  // set error message
-  for (const key in errors) {
-    const element = form.querySelector(`[name="${key}"]`)
-    if (element) {
-      element.setCustomValidity(errors[key])
-      setTextContent(element.parentElement, '.invalid-feedback', errors[key])
+function setFieldError(form, name, error) {
+  const element = form.querySelector(`[name="${name}"]`)
+  if (element) {
+    element.setCustomValidity(error)
+    setTextContent(element.parentElement, '.invalid-feedback', error)
+  }
+}
+
+async function validatePostForm(form, formValues) {
+  try {
+    //reset prev error
+    ;['title', 'author'].forEach((name) => setFieldError(form, name, ''))
+
+    const schema = getPostSchema()
+    await schema.validate(formValues, { abortEarly: false })
+  } catch (error) {
+    // console.log(error.name)
+    // console.log(error.inner)
+
+    const errorLog = {}
+
+    if (error.name === 'ValidationError' && Array.isArray(error.inner)) {
+      for (const validationError of error.inner) {
+        const name = validationError.path // title, author
+        const messageError = validationError.message
+
+        // ignore if the field is already logged
+        if (errorLog[name]) continue
+        setFieldError(form, name, messageError)
+
+        errorLog[name] = true
+      }
     }
   }
 
