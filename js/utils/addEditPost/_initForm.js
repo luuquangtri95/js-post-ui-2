@@ -1,4 +1,4 @@
-import { setBackgroundImage, setFieldValue } from '..'
+import { setBackgroundImage, setFieldValue, setTextContent } from '..'
 
 function setFormValue(form, formValue) {
   setFieldValue(form, '[name="title"]', formValue?.title)
@@ -26,6 +26,43 @@ function getFormValue(form) {
   return formValues
 }
 
+function getTitleError(form) {
+  const titleElement = form.querySelector('[name="title"]')
+  if (!titleElement) return
+
+  // check required
+  if (titleElement.validity.valueMissing) return 'Please enter title'
+
+  // at least two words
+  if (titleElement.value.split(' ').filter((x) => !!x && x.length >= 3) < 2) {
+    return 'please enter at least two words of 2 characters'
+  }
+
+  return ''
+}
+
+function validatePostForm(form, formValues) {
+  // get error
+  const errors = {
+    title: getTitleError(form),
+  }
+
+  // set error message
+  for (const key in errors) {
+    const element = form.querySelector(`[name="${key}"]`)
+    if (element) {
+      element.setCustomValidity(errors[key])
+      setTextContent(element.parentElement, '.invalid-feedback', errors[key])
+    }
+  }
+
+  // add was-validated class to form element
+  const isValid = form.checkValidity()
+  if (!isValid) form.classList.add('was-validated')
+
+  return false
+}
+
 export function initForm({ elementId, defaultValue, onSubmit }) {
   const formElement = document.getElementById(elementId)
   if (!formElement) return
@@ -41,5 +78,7 @@ export function initForm({ elementId, defaultValue, onSubmit }) {
     // validation
     // if valid trigger submit callback
     // otherwise, show validation error
+
+    if (!validatePostForm(formElement, formValue)) return // trường hợp không hợp lệ
   })
 }
