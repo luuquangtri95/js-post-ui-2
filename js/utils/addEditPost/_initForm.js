@@ -34,7 +34,7 @@ function getTitleError(form) {
   if (titleElement.validity.valueMissing) return 'Please enter title'
 
   // at least two words
-  if (titleElement.value.split(' ').filter((x) => !!x && x.length >= 3) < 2) {
+  if (titleElement.value.split(' ').filter((x) => !!x && x.length >= 3).length < 2) {
     return 'please enter at least two words of 2 characters'
   }
 
