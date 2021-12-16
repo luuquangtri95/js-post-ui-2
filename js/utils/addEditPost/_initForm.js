@@ -27,21 +27,6 @@ function getFormValue(form) {
   return formValues
 }
 
-function getTitleError(form) {
-  const titleElement = form.querySelector('[name="title"]')
-  if (!titleElement) return
-
-  // check required
-  if (titleElement.validity.valueMissing) return 'Please enter title'
-
-  // at least two words
-  if (titleElement.value.split(' ').filter((x) => !!x && x.length >= 3).length < 2) {
-    return 'please enter at least two words of 2 characters'
-  }
-
-  return ''
-}
-
 function getPostSchema() {
   return yup.object().shape({
     title: yup.string().required('please enter title'),
@@ -92,9 +77,9 @@ async function validatePostForm(form, formValues) {
 
   // add was-validated class to form element
   const isValid = form.checkValidity()
-  if (!isValid) form.classList.add('was-validated')
+  if (!isValid) form.classList.add('was-validated') // nếu form không hợp lệ thì add class was-validated
 
-  return false
+  return isValid
 }
 
 export function initForm({ elementId, defaultValue, onSubmit }) {
@@ -103,16 +88,19 @@ export function initForm({ elementId, defaultValue, onSubmit }) {
 
   setFormValue(formElement, defaultValue)
 
-  formElement.addEventListener('submit', (e) => {
+  formElement.addEventListener('submit', async (e) => {
     e.preventDefault()
 
     // get form value
     const formValue = getFormValue(formElement)
-    console.log(formValue)
     // validation
     // if valid trigger submit callback
     // otherwise, show validation error
 
-    if (!validatePostForm(formElement, formValue)) return // trường hợp không hợp lệ
+    const isValid = await validatePostForm(formElement, formValue)
+
+    if (!isValid) return // trường hợp không hợp lệ
+
+    onSubmit?.(formValue)
   })
 }
