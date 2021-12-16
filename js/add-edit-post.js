@@ -30,7 +30,6 @@ async function handlePostFormSubmit(formValue) {
           author: '',
         }
 
-    console.log('default value', defaultValue)
     initForm({
       elementId: 'postForm',
       defaultValue,
