@@ -93,6 +93,7 @@ export function initForm({ elementId, defaultValue, onSubmit }) {
 
     // get form value
     const formValue = getFormValue(formElement)
+    formValue.id = defaultValue.id // nếu là mode edit thì value phải có id
     // validation
     // if valid trigger submit callback
     // otherwise, show validation error

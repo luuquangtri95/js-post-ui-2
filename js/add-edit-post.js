@@ -1,13 +1,18 @@
 import postApi from './apis/postApi'
-import { initForm } from './utils'
+import { initForm, toast } from './utils'
 
 async function handlePostFormSubmit(formValue) {
   try {
     const savedPost = formValue.id ? await postApi.update(formValue) : await postApi.add(formValue)
 
-    window.location.assign(`/post-detail.html?id=${savedPost.id}`)
+    // show message
+    toast.success('saved post successfully')
+
+    setTimeout(() => {
+      window.location.assign(`/post-detail.html?id=${savedPost.id}`)
+    }, 2000)
   } catch (error) {
-    console.log('failed to fetch', error)
+    toast.error(error)
   }
 }
 
@@ -25,6 +30,7 @@ async function handlePostFormSubmit(formValue) {
           author: '',
         }
 
+    console.log('default value', defaultValue)
     initForm({
       elementId: 'postForm',
       defaultValue,
