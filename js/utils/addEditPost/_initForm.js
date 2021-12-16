@@ -1,4 +1,4 @@
-import { setBackgroundImage, setFieldValue, setTextContent } from '..'
+import { randomNumber, setBackgroundImage, setFieldValue, setTextContent } from '..'
 import * as yup from 'yup'
 
 function setFormValue(form, formValue) {
@@ -37,6 +37,10 @@ function getPostSchema() {
         return value.split(' ').filter((x) => !!x && x.length >= 3).length >= 2
       }),
     description: yup.string(),
+    imageUrl: yup
+      .string()
+      .required('please random a background image')
+      .url('please enter a valid url'),
   })
 }
 
@@ -51,7 +55,7 @@ function setFieldError(form, name, error) {
 async function validatePostForm(form, formValues) {
   try {
     //reset prev error
-    ;['title', 'author'].forEach((name) => setFieldError(form, name, ''))
+    ;['title', 'author', 'imageUrl'].forEach((name) => setFieldError(form, name, ''))
 
     const schema = getPostSchema()
     await schema.validate(formValues, { abortEarly: false })
@@ -98,6 +102,20 @@ function hideLoading(form) {
   }
 }
 
+function initRandomImage() {
+  const button = document.getElementById('postChangeImage')
+  if (!button) return
+
+  button.addEventListener('click', () => {
+    // random id
+    // build url
+    const imageUrl = `https://picsum.photos/id/${randomNumber(1000)}/1368/400`
+    // set image input + bg
+    setFieldValue(document, '[name="imageUrl"]', imageUrl) //hidden field -> dùng để lấy image url dễ dàng hơn
+    setBackgroundImage(document, '#postHeroImage', imageUrl)
+  })
+}
+
 export function initForm({ elementId, defaultValue, onSubmit }) {
   const formElement = document.getElementById(elementId)
   if (!formElement) return
@@ -105,6 +123,9 @@ export function initForm({ elementId, defaultValue, onSubmit }) {
   let submitting = false
 
   setFormValue(formElement, defaultValue)
+
+  // init random image
+  initRandomImage()
 
   formElement.addEventListener('submit', async (e) => {
     e.preventDefault()
@@ -126,10 +147,10 @@ export function initForm({ elementId, defaultValue, onSubmit }) {
 
     const isValid = await validatePostForm(formElement, formValue)
 
-    if (!isValid) return // trường hợp không hợp lệ
+    // if (!isValid) return // trường hợp không hợp lệ
+    if (isValid) await onSubmit?.(formValue)
 
-    await onSubmit?.(formValue)
-
+    // dù có valid hay không thì vẫn ẩn loading 
     hideLoading(formElement)
     submitting = false
   })
