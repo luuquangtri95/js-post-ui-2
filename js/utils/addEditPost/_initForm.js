@@ -82,14 +82,40 @@ async function validatePostForm(form, formValues) {
   return isValid
 }
 
+function showLoading(form) {
+  const buttonElement = form.querySelector('[name="submit"]')
+  if (buttonElement) {
+    buttonElement.disabled = true
+    buttonElement.textContent = 'saving...'
+  }
+}
+
+function hideLoading(form) {
+  const buttonElement = form.querySelector('[name="submit"]')
+  if (buttonElement) {
+    buttonElement.disabled = false
+    buttonElement.textContent = 'save'
+  }
+}
+
 export function initForm({ elementId, defaultValue, onSubmit }) {
   const formElement = document.getElementById(elementId)
   if (!formElement) return
+
+  let submitting = false
 
   setFormValue(formElement, defaultValue)
 
   formElement.addEventListener('submit', async (e) => {
     e.preventDefault()
+
+    if (submitting) {
+      return
+    }
+
+    // show loading
+    showLoading(formElement)
+    submitting = true
 
     // get form value
     const formValue = getFormValue(formElement)
@@ -102,6 +128,9 @@ export function initForm({ elementId, defaultValue, onSubmit }) {
 
     if (!isValid) return // trường hợp không hợp lệ
 
-    onSubmit?.(formValue)
+    await onSubmit?.(formValue)
+
+    hideLoading(formElement)
+    submitting = false
   })
 }
