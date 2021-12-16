@@ -1,7 +1,15 @@
 import postApi from './apis/postApi'
 import { initForm } from './utils'
 
-async function handlePostFormSubmit(formValue) {}
+async function handlePostFormSubmit(formValue) {
+  try {
+    const savedPost = formValue.id ? await postApi.update(formValue) : await postApi.add(formValue)
+
+    window.location.assign(`/post-detail.html?id=${savedPost.id}`)
+  } catch (error) {
+    console.log('failed to fetch', error)
+  }
+}
 
 ;(async () => {
   try {
