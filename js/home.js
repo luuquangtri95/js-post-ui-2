@@ -1,12 +1,14 @@
 import postApi from './apis/postApi'
-import { initPagination, initSearchInput, renderPagination, renderPostList } from './utils'
+import { initPagination, initSearchInput, renderPagination, renderPostList, toast } from './utils'
 
 async function handleFilterChange(filterName, filterValue) {
   try {
     const url = new URL(window.location)
-    url.searchParams.set(filterName, filterValue)
+
+    if (filterName) url.searchParams.set(filterName, filterValue)
 
     //reset page if needed
+
     if (filterName === 'title_like') url.searchParams.set('_page', 1)
 
     history.pushState({}, '', url)
@@ -22,6 +24,24 @@ async function handleFilterChange(filterName, filterValue) {
   }
 }
 
+function registerPostDeleteEvent() {
+  document.addEventListener('post-delete', async (event) => {
+    try {
+      const post = event.detail
+      const message = `are you sure to remove post ${post.title}`
+      if (window.confirm(message)) {
+        // call Api to remove post by id
+        await postApi.remove(post.id)
+        await handleFilterChange()
+
+        toast.success('remove post successfully !!')
+      }
+    } catch (error) {
+      toast.error('failed to delete post', error)
+    }
+  })
+}
+
 // MAIN
 ;(async () => {
   try {
@@ -34,6 +54,8 @@ async function handleFilterChange(filterName, filterValue) {
 
     history.pushState({}, '', url)
     const queryParams = url.searchParams
+
+    registerPostDeleteEvent()
 
     // attach event for links
     initPagination({
