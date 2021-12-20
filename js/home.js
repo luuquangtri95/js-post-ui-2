@@ -55,8 +55,6 @@ function registerPostDeleteEvent() {
     history.pushState({}, '', url)
     const queryParams = url.searchParams
 
-    registerPostDeleteEvent()
-
     // attach event for links
     initPagination({
       elementId: 'pagination',
@@ -70,10 +68,8 @@ function registerPostDeleteEvent() {
       onChange: (value) => handleFilterChange('title_like', value),
     })
 
-    const { data, pagination } = await postApi.getAll(queryParams)
-
-    renderPostList('postsList', data)
-    renderPagination('pagination', pagination)
+    handleFilterChange()
+    registerPostDeleteEvent()
   } catch (error) {
     console.log(error)
   }
